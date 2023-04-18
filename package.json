@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "cookie-session": "^2.0.0",
     "next": "13.3.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sweetalert2": "^11.7.3"
   }
 }

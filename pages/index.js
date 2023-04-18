@@ -1,11 +1,98 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-
+// Import the SweetAlert2 library
+import Swal from 'sweetalert2';
+import { useState } from 'react';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+  const [gistID, setGistID] = useState('');
+  const [username, setUsername] = useState('');
+
+  // Create a function to show the SweetAlert2 input box
+  function showUrlInputBox() {
+    // Use SweetAlert2 to show an input box with a URL type
+    Swal.fire({
+      title: 'Enter a URL',
+      input: 'url',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Validate',
+      cancelButtonText: 'Cancel',
+      showLoaderOnConfirm: true,
+      preConfirm: (url) => {
+        // Validate the URL and return a Promise that resolves to the result
+        return validateUrl(url)
+          .catch((error) => {
+            console.log(error);
+            Swal.showValidationMessage(error);
+          });
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log({ gistID, username });
+        Swal.fire({
+          title: 'Valid URL',
+          text: `The URL is valid`,
+          icon: 'success'
+        });
+      }
+    });
+  }
+
+  // Create a function to validate a URL
+  async function validateUrl(url) {
+    const validProtocol = 'https://';
+    const validDomain = 'gist.github.com';
+
+    if (!url.startsWith(validProtocol)) {
+      return Promise.reject('Invalid protocol. Please use https instead of http');
+    }
+
+    const urlWithoutProtocol = url.slice(validProtocol.length);
+    const [domain, username, gistId] = urlWithoutProtocol.split('/');
+
+    if (domain !== validDomain) {
+      return Promise.reject('Invalid domain. Only gist.github.com is allowed');
+    }
+
+    if (!username || !/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(username)) {
+      return Promise.reject('Oops! The username you entered is invalid. Please check and try again');
+    }
+
+    const response = await fetch(`https://api.github.com/gists/${gistId}`);
+
+    if (!response.ok) {
+      return Promise.reject("Oops! We couldn't find the gist you were looking for. Please check the URL and try again");
+    }
+
+    const { files, owner } = await response.json();
+
+    if (Object.keys(files).length !== 1) {
+      return Promise.reject('Keep your gist simple - Use only one file')
+    }
+
+    const file = files[Object.keys(files)[0]];
+
+    if (file.type !== 'text/markdown') {
+      return Promise.reject("Use markdown format for your files - it's the way to go!")
+    }
+
+    setGistID(gistId);
+    setUsername(owner.login);
+
+    return Promise.resolve('The URL is valid');
+  }
+
+
+
+
+
   return (
     <>
       <Head>
@@ -14,100 +101,8 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.description}>
-          <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>pages/index.js</code>
-          </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{' '}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Docs <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Find in-depth information about Next.js features and&nbsp;API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Learn <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Learn about Next.js in an interactive course with&nbsp;quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Templates <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Discover and deploy boilerplate example Next.js&nbsp;projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <h2 className={inter.className}>
-              Deploy <span>-&gt;</span>
-            </h2>
-            <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
-            </p>
-          </a>
-        </div>
+      <main className={inter.className}>
+        <button onClick={showUrlInputBox}>click</button>
       </main>
     </>
   )
