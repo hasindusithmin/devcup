@@ -36,18 +36,16 @@ export default function Home() {
       allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log({ gistID, username });
-        Swal.fire({
-          title: 'Valid URL',
-          text: `The URL is valid`,
-          icon: 'success'
-        });
+        
+        Swal.fire("Congratulations, you've added!")
+
       }
     });
   }
 
   // Create a function to validate a URL
   async function validateUrl(url) {
+    console.log(url);
     const validProtocol = 'https://';
     const validDomain = 'gist.github.com';
 
@@ -72,8 +70,8 @@ export default function Home() {
       return Promise.reject("Oops! We couldn't find the gist you were looking for. Please check the URL and try again");
     }
 
-    const { files, owner } = await response.json();
-
+    const { files, owner, description } = await response.json();
+    console.log(description);
     if (Object.keys(files).length !== 1) {
       return Promise.reject('Keep your gist simple - Use only one file')
     }
@@ -82,6 +80,10 @@ export default function Home() {
 
     if (file.type !== 'text/markdown') {
       return Promise.reject("Use markdown format for your files - it's the way to go!")
+    }
+
+    if (description === "") {
+      return Promise.reject('Gist description is required')
     }
 
     setGistID(gistId);

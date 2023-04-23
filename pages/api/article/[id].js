@@ -8,8 +8,8 @@ export default async function handler(req, res) {
         const response = await fetch(url);
         if (!response.ok) throw Error("data not available at this moment");
 
-        const { codes } = await response.json();
-
+        let { codes } = await response.json();
+        codes = codes.reverse()
         const startIndex = (id - 1) * 3;
         const endIndex = startIndex + 3;
         const result = codes.slice(startIndex, endIndex);
