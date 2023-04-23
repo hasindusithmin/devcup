@@ -1,5 +1,5 @@
-import Script from "next/script"
 import Link from "next/link";
+import { toast } from "react-toastify";
 import Gist from 'super-react-gist'
 export default function Post({ data }) {
 
@@ -29,11 +29,18 @@ export default function Post({ data }) {
         window.open(gist, '_blank', 'width=' + w + ', height=' + h + ', left=' + left + ', top=' + top);
     }
 
+    function textToCopy() {
+        navigator.clipboard.writeText(data.pID)
+            .then(() => {
+                toast.success("Copied", { autoClose: 500, hideProgressBar: true,position:'top-left' })
+            })
+    }
+
 
     return (
         <div className="w3-card w3-margin w3-round-large">
             <header className="w3-container w3-light-grey">
-                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#333333' }}>{data.headline}</h5>
+                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#333333' }} onClick={textToCopy}>{data.headline}</h5>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div className="w3-twothird">
                         <p><span role="img" aria-label="pen">📝</span> Written by: <Link href={`https://github.com/${data.writer}`}>{data.writer}</Link></p>
@@ -47,7 +54,7 @@ export default function Post({ data }) {
             </header>
             <div className="w3-container">
                 <p>
-                    <Gist url={`https://gist.github.com/${data.writer}/${data.pID}`}/>
+                    <Gist url={`https://gist.github.com/${data.writer}/${data.pID}`} />
                 </p>
                 <div className="w3-padding">
                     <button className="w3-button w3-blue w3-round-large" onClick={addComment}>Add Comment 🗨️</button>

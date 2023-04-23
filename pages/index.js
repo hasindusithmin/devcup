@@ -4,13 +4,14 @@ import { Inter } from 'next/font/google'
 // Import the SweetAlert2 library
 import Swal from 'sweetalert2';
 import { useState } from 'react';
-import Link from 'next/link';
+import Gist from 'super-react-gist'
+import { ToastContainer, toast } from 'react-toastify';
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
   const [gistID, setGistID] = useState('');
-  const [username, setUsername] = useState('');
 
   // Create a function to show the SweetAlert2 input box
   function showUrlInputBox() {
@@ -35,9 +36,20 @@ export default function Home() {
       },
       allowOutsideClick: () => !Swal.isLoading()
     }).then((result) => {
+
       if (result.isConfirmed) {
-        
-        Swal.fire("Congratulations, you've added!")
+
+        Swal.fire(
+          'Verified',
+          '',
+          'success'
+        )
+          .then((result) => {
+            if (result.isConfirmed) {
+              setVerified(true)
+            }
+          })
+
 
       }
     });
@@ -71,7 +83,6 @@ export default function Home() {
     }
 
     const { files, owner, description } = await response.json();
-    console.log(description);
     if (Object.keys(files).length !== 1) {
       return Promise.reject('Keep your gist simple - Use only one file')
     }
@@ -83,18 +94,35 @@ export default function Home() {
     }
 
     if (description === "") {
-      return Promise.reject('Gist description is required')
+      return Promise.reject('Please provide a brief description of your Gist')
     }
 
     setGistID(gistId);
-    setUsername(owner.login);
 
     return Promise.resolve('The URL is valid');
   }
 
+  const [verified, setVerified] = useState(false);
+  const [posting,setPosting] = useState(false);
 
-
-
+  async function published() {
+    const toastID = toast.loading("Please wait...")
+    setPosting(true)
+    const URL = `${process.env.NEXT_PUBLIC_APP_SERVICE}/endpoint/codeHander?method=PUT&code=${gistID}`
+    try {
+      const res = await fetch(URL);
+      if (!res.ok) {
+        const { error } = await res.json();
+        throw new Error(error);
+      }
+      toast.update(toastID, { render: "Success! post has been added!", type: "success", isLoading: false, autoClose: 1500, hideProgressBar: true });
+      setPosting(false);
+      setVerified(false);
+    } catch (error) {
+      setPosting(false)
+      toast.update(toastID, { render: error.message, type: "error", isLoading: false, autoClose: 1500, hideProgressBar: true });
+    }
+  }
 
   return (
     <>
@@ -104,15 +132,22 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={`w3-content ${inter.className}`}>
-        <div className='w3-jumbo'>
-          🚧👷🚧 This site is currently under construction! We apologize for any inconvenience this may cause
+      <ToastContainer />
+      <main className={`w3-panel w3-content ${inter.className}`} style={{ maxWidth: 1400 }}>
+        <div className="w3-col l8 s12">
+          <div>
+            <button className='w3-button w3-blue' onClick={showUrlInputBox} disabled={verified ? true : false}>Add</button>
+            <button className='w3-button w3-red' onClick={published} disabled={verified && !posting ? false : true}>Post</button>
+          </div>
         </div>
-        <div>
-          <button onClick={showUrlInputBox} className='w3-btn w3-blue w3-round'>Add a post</button>
-        </div>
-        <div>
-          <Link href="/article/1" className='w3-btn'>/article</Link>
+        <div className="w3-col l4">
+          {
+            verified &&
+            <Gist
+              url={`https://gist.github.com/hasindusithmin/${gistID}`}
+              LoadingComponent={() => <div>Waiting for Gist...</div>}
+            />
+          }
         </div>
       </main>
     </>

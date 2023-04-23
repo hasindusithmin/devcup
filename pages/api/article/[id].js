@@ -2,8 +2,7 @@ const fetch = require('node-fetch');
 
 export default async function handler(req, res) {
     const { id } = req.query;
-    const url = "https://data.mongodb-api.com/app/born-yahdr/endpoint/codeHander?method=GET"
-
+    const url = `${process.env.NEXT_PUBLIC_APP_SERVICE}/endpoint/codeHander?method=GET`
     try {
         const response = await fetch(url);
         if (!response.ok) throw Error("data not available at this moment");
