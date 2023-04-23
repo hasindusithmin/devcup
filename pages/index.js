@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 // Import the SweetAlert2 library
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import Link from 'next/link';
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
@@ -101,8 +102,16 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={inter.className}>
-        <button onClick={showUrlInputBox}>click</button>
+      <main className={`w3-content ${inter.className}`}>
+        <div className='w3-jumbo'>
+          🚧👷🚧 This site is currently under construction! We apologize for any inconvenience this may cause
+        </div>
+        <div>
+          <button onClick={showUrlInputBox} className='w3-btn w3-blue w3-round'>Add a post</button>
+        </div>
+        <div>
+          <Link href="/article/1" className='w3-btn'>/article</Link>
+        </div>
       </main>
     </>
   )
