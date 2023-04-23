@@ -126,7 +126,7 @@ export default function Article() {
                     {
                         articles &&
                         <>
-                            <div className='w3-container'>
+                            <div className=''>
                                 {articles.map(article => <Post key={article.pID} data={article} />)}
                             </div>
                             <div className='w3-container'>
