@@ -1,5 +1,6 @@
-import Gist from "react-gist"
+import Script from "next/script"
 import Link from "next/link";
+import Gist from 'super-react-gist'
 export default function Post({ data }) {
 
     function convertUtcToIst(utcDateString) {
@@ -46,7 +47,7 @@ export default function Post({ data }) {
             </header>
             <div className="w3-container">
                 <p>
-                    <Gist id={data.pID} />
+                    <Gist url={`https://gist.github.com/${data.writer}/${data.pID}`}/>
                 </p>
                 <div className="w3-padding">
                     <button className="w3-button w3-blue w3-round-large" onClick={addComment}>Add Comment 🗨️</button>
@@ -81,7 +82,7 @@ export default function Post({ data }) {
                     </div>
                 }
             </div>
-            <hr/>
+            <hr />
         </div >
     );
 
