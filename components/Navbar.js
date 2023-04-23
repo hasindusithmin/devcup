@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function Navbar() {
     return (
-        <div className="w3-bar w3-black w3-hide-small">
+        <div className="w3-bar w3-black">
             <Link href="/" className="w3-bar-item w3-button" title="Home">
                 <i className="fa fa-home" />
             </Link>
