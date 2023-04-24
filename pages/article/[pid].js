@@ -113,14 +113,6 @@ export default function Article() {
             </Head>
             <ToastContainer />
             <main className={`w3-light-grey w3-content ${inter.className}`} style={{ maxWidth: 1400 }}>
-                <header className="w3-container w3-center w3-padding-48 w3-white">
-                    <h1 className="w3-xxxlarge">
-                        <b>DEVCUP</b> <img src="/coffee.gif" alt="coffee" width={32} height={32} />
-                    </h1>
-                    <h6>
-                        Take a sip of coffee, and a gulp of developer wisdom. Double-shot your skills with DevCup
-                    </h6>
-                </header>
 
                 <div className="w3-col l8 s12">
                     {
