@@ -151,7 +151,6 @@ export default function Article() {
                 {
                     process &&
                     <div className="w3-col l4">
-                        {/* About Card */}
                         <div className="w3-card w3-round-large w3-margin w3-margin-top">
                             <img
                                 src="/devcup-logo.png"

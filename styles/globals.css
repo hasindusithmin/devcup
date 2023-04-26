@@ -1996,3 +1996,25 @@ a {
 .w3-inline {
   display: inline;
 }
+
+/* Style the scrollbar */
+::-webkit-scrollbar {
+  width: 5px; 
+  border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #e9e5e5; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background: #aeb3b0; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #be3232; 
+}
