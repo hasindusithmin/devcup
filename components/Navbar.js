@@ -8,7 +8,7 @@ export default function Navbar() {
                 <Link href="/" className="w3-bar-item w3-button" title="Home">
                     <i className="fa fa-home" style={{fontSize:20}} />
                 </Link>
-                <Link href="/article/1" className="w3-bar-item w3-button" title="Article">
+                <Link href="/article" className="w3-bar-item w3-button" title="Article">
                     <i className="fa fa-newspaper-o" style={{fontSize:20}} />
                 </Link>
             </div>
