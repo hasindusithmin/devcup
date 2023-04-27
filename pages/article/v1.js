@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { ToastContainer, toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import ReactPaginate from 'react-paginate';
 import { Inter } from 'next/font/google'
 import Post from '@/components/Post';
@@ -24,8 +23,8 @@ function Items({ currentItems }) {
 
 export default function Page() {
 
-    const navigate = useRouter()
     const [Articles, setArticles] = useState(null);
+    const [error, setError] = useState(null);
     const [itemOffset, setItemOffset] = useState(0);
     const [showPost, setShowPost] = useState(true);
 
@@ -47,7 +46,7 @@ export default function Page() {
     useEffect(() => {
         (async () => {
             const toastID = toast.loading("Please wait...")
-            const res = await fetch('/api/article');
+            const res = await fetch('/api/articles');
             if (res.status === 200) {
                 toast.update(toastID, { render: "Data is fetched successfully!", type: "success", isLoading: false, autoClose: 1500, hideProgressBar: true });
                 const codes = await res.json();
@@ -57,7 +56,8 @@ export default function Page() {
                             fetch(`https://api.github.com/gists/${gID}`),
                             fetch(`https://api.github.com/gists/${gID}/comments`)
                         ]);
-                        if (gistResponse.status !== 200) return
+                        if (gistResponse.status !== 200) throw Error(gistResponse.statusText)
+                        setError(null);
                         const { owner, ...gistData } = await gistResponse.json();
                         const { login, avatar_url } = owner ?? {};
                         const commentsData = await commentsResponse.json();
@@ -78,6 +78,17 @@ export default function Page() {
                         };
                     } catch (error) {
                         console.log('🔥🔥🔥🔥🔥🔥', error.message);
+                        setTimeout(() => {
+                            toast.update(toastID, { render: "Oops,technical difficulties!", type: "error", isLoading: false, autoClose: 1500, hideProgressBar: true });
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Oops...',
+                                text: "Oops, it seems like Github API is currently experiencing some technical difficulties!"
+                            })
+                                .finally(() => {
+                                    setError("Sorry, we're unable to display this page right now. Please try again later")
+                                })
+                        }, 1500)
                     }
                 }));
                 setArticles(articles.filter(Boolean));
@@ -85,14 +96,14 @@ export default function Page() {
             else {
                 console.log('🔥🔥🔥🔥🔥🔥', error.message);
                 setTimeout(() => {
-                    toast.update(toastID, { render: "Data not available!", type: "error", isLoading: false, autoClose: 1500, hideProgressBar: true });
+                    toast.update(toastID, { render: "Oops,technical difficulties!", type: "error", isLoading: false, autoClose: 1500, hideProgressBar: true });
                     Swal.fire({
                         icon: 'warning',
                         title: 'Oops...',
-                        text: "Sorry, we're unable to display this page right now. Please try again later"
+                        text: "Oops, it seems like Mongodb cloud function is currently experiencing some technical difficulties!"
                     })
                         .finally(() => {
-                            navigate.push('/')
+                            setError("Sorry, we're unable to display this page right now. Please try again later");
                         })
                 }, 1500)
             }
@@ -132,12 +143,12 @@ export default function Page() {
                             <div className="w3-center">
                                 <ReactPaginate
                                     breakLabel="..."
-                                    nextLabel="▶"
                                     onPageChange={handlePageClick}
                                     pageRangeDisplayed={5}
                                     pageCount={pageCount}
-                                    previousLabel="◀"
                                     renderOnZeroPageCount={null}
+                                    nextLabel="▶"
+                                    previousLabel="◀"
                                     className="w3-bar"
                                     activeClassName="w3-inline"
                                     activeLinkClassName="w3-button w3-round w3-gray"
@@ -153,7 +164,16 @@ export default function Page() {
                         </>
                     }
                     {
+                        error &&
+                        <div className='w3-center w3-padding-64 w3-text-red'>
+                            {error}
+                        </div>
+                    }
+                    {
                         !Articles && <Loading />
+                    }
+                    {
+                        Articles && Articles.every(element => element === undefined) && <div className='w3-padding'></div>
                     }
                 </div>
 

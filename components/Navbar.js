@@ -27,7 +27,7 @@ export default function Navbar() {
                 <Link href="/" className="w3-bar-item w3-round" title="Home" style={{ padding: 0, marginRight: 10, display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
                     <span style={{ marginRight: 5 }}><i className="fa fa-home" style={{ fontSize: 39.5 }} /></span> <span style={{ fontWeight: 'bold', alignItems: 'center', fontSize: 12 }}>HOME</span>
                 </Link>
-                <Link href="/article" className="w3-bar-item w3-round" title="Article" style={{ padding: 0, marginRight: 10, display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+                <Link href="/article/v1" className="w3-bar-item w3-round" title="Article" style={{ padding: 0, marginRight: 10, display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
                     <span style={{ marginRight: 5 }}><i className="fa fa-sticky-note-o" style={{ fontSize: 39.5 }} /></span> <span style={{ fontWeight: 'bold', alignItems: 'center', fontSize: 12 }}>ARTICLE</span>
                 </Link>
             </div>
