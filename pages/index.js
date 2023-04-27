@@ -183,7 +183,7 @@ export default function Home() {
       <main className={`${inter.className} w3-panel w3-content`} style={{ maxWidth: 1400 }}>
 
         <div className="w3-col l8 s12">
-          <div className="w3-card w3-margin w3-padding w3-round-xlarge">
+          <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
             <Splide aria-label="Home Page Slideshow" options={{ autoplay: true, interval: 3000 }}>
               {
                 homePageSlides.map(({ image, text, position }) => {
@@ -214,7 +214,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w3-card w3-margin w3-padding w3-round-xlarge">
+          <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
             <h3 className='w3-opacity' style={{ fontWeight: 'bold' }}>
               A STEP-BY-STEP GUIDE TO SHARING YOUR IDEAS ON DEVCUP
             </h3>
@@ -244,7 +244,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="w3-card w3-margin w3-padding w3-round-xlarge">
+          <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
             <h3 className='w3-opacity' style={{ fontWeight: 'bold' }}>
               WHICH CATEGORY WOULD YOU LIKE TO POST UNDER?
             </h3>
@@ -263,10 +263,11 @@ export default function Home() {
         </div>
 
         <div className="w3-col l4">
-          <div className="w3-card w3-round-xlarge w3-margin">
+          <div className="w3-card w3-round-xlarge w3-margin-small">
             <img
               src="/devcup-logo.png"
               style={{ width: "100%" }}
+              className='w3-round'
             />
             <div className="w3-container w3-white w3-padding">
               <h4>
@@ -282,7 +283,7 @@ export default function Home() {
           </div>
           {
             verified &&
-            <div className="w3-card w3-round-xlarge w3-margin w3-padding">
+            <div className="w3-card w3-round-xlarge w3-margin-small w3-padding">
               <div className='w3-center w3-padding'>
                 <button className='w3-button w3-blue w3-round-large w3-margin-right' onClick={published} disabled={verified && !posting ? false : true}>
                   <b><i className="fa fa-bullhorn" aria-hidden="true"></i> Publish</b>
