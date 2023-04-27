@@ -17,8 +17,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-paginate": "^8.2.0",
+    "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^9.1.2",
-    "react-typewriting-effect": "^1.0.4",
     "super-react-gist": "^1.1.1",
     "sweetalert2": "^11.7.3"
   }

@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
-import { Typewriter } from 'react-typewriting-effect';
 import Swal from 'sweetalert2';
 import { useState, useEffect } from 'react';
 import Gist from 'super-react-gist'

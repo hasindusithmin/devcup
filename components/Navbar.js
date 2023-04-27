@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Inter } from 'next/font/google'
 import Image from "next/image"
-import { Typewriter } from 'react-typewriting-effect';
+import { Typewriter } from 'react-simple-typewriter'
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 const inter = Inter({ subsets: ['latin'] })
@@ -37,8 +37,8 @@ export default function Navbar() {
                 </h1>
                 <Typewriter
                     key={typewriterKey}
-                    string="Take a sip of coffee, and a gulp of developer wisdom. Double-shot your skills with Devcup"
-                    delay={50}
+                    words={["Take a sip of coffee, and a gulp of developer wisdom. Double-shot your skills with Devcup"]}
+                    typeSpeed={50}
                     stopBlinkinOnComplete
                     cursor="|"
                 />
