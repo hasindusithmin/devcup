@@ -57,7 +57,7 @@ export default function Page() {
                             fetch(`https://api.github.com/gists/${gID}`),
                             fetch(`https://api.github.com/gists/${gID}/comments`)
                         ]);
-                        if (gistResponse.status !== 200) return;
+                        if (gistResponse.status !== 200) return
                         const { owner, ...gistData } = await gistResponse.json();
                         const { login, avatar_url } = owner ?? {};
                         const commentsData = await commentsResponse.json();
@@ -77,14 +77,13 @@ export default function Page() {
                             comments
                         };
                     } catch (error) {
-                        console.log('+++++++++++');
                         console.log('🔥🔥🔥🔥🔥🔥', error.message);
-                        console.log('+++++++++++');
                     }
                 }));
                 setArticles(articles.filter(Boolean));
             }
             else {
+                console.log('🔥🔥🔥🔥🔥🔥', error.message);
                 setTimeout(() => {
                     toast.update(toastID, { render: "Data not available!", type: "error", isLoading: false, autoClose: 1500, hideProgressBar: true });
                     Swal.fire({
@@ -133,15 +132,15 @@ export default function Page() {
                             <div className="w3-center">
                                 <ReactPaginate
                                     breakLabel="..."
-                                    nextLabel="Next ▶"
+                                    nextLabel="▶"
                                     onPageChange={handlePageClick}
                                     pageRangeDisplayed={5}
                                     pageCount={pageCount}
-                                    previousLabel="◀ Prev"
+                                    previousLabel="◀"
                                     renderOnZeroPageCount={null}
                                     className="w3-bar"
                                     activeClassName="w3-inline"
-                                    activeLinkClassName="w3-button w3-round w3-green"
+                                    activeLinkClassName="w3-button w3-round w3-gray"
                                     previousClassName="w3-inline"
                                     previousLinkClassName="w3-button w3-light-gray w3-round"
                                     nextClassName="w3-inline"

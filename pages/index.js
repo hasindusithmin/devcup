@@ -220,7 +220,7 @@ export default function Home() {
             </h3>
             To create a markdown file in Gist, follow these simple steps:
             <ol style={{ listStyleType: 'none' }}>
-              <li>🌐 Go to the Gist website.</li>
+              <li>🌐 Go to the <Link href="https://gist.github.com/" target='_blank'>gist.github.com</Link> website.</li>
               <li>👤 Sign in to your account or create a new one if you haven't already.</li>
               <li>➕ Click on the "New Gist" button in the top-right corner.</li>
               <li>📝 Name your Gist and add a description if you want to.</li>

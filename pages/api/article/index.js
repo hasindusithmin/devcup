@@ -8,6 +8,7 @@ export default async function handler(req, res) {
         if (!response.ok) throw Error("data not available at this moment");
 
         let { codes } = await response.json();
+        codes.reverse()
         res.status(200).json(codes)
     } catch (error) {
         res.status(400).json({ error: error.message })

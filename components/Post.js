@@ -3,22 +3,13 @@ import { toast } from "react-toastify";
 import Gist from 'super-react-gist'
 export default function Post({ data }) {
 
-    function convertUtcToIst(utcDateString) {
-        // Create a new Date object from the UTC date string
-        const utcDate = new Date(utcDateString);
-
-        // Calculate the UTC offset in milliseconds for the IST time zone
-        const istOffset = 5.5 * 60 * 60 * 1000;
-
-        // Add the IST offset to the UTC time to get the local time in IST
-        const istTime = utcDate.getTime() + istOffset;
-
-        // Create a new Date object from the local time in IST
-        const istDate = new Date(istTime);
-
-        // Return the local date string in IST format
-        return istDate.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+    function convertUTCToSriLankaTime(utcDateTimeString) {
+        const utcDateTime = new Date(utcDateTimeString);
+        const sriLankaOffset = 330; // Sri Lanka time zone is UTC+05:30
+        const sriLankaDateTime = new Date(utcDateTime.getTime() + sriLankaOffset * 60 * 1000);
+        return sriLankaDateTime.toLocaleString();
     }
+
 
     function addComment() {
         let w = 800;
@@ -32,7 +23,7 @@ export default function Post({ data }) {
     function textToCopy() {
         navigator.clipboard.writeText(data.pID)
             .then(() => {
-                toast.success("Copied", { autoClose: 500, hideProgressBar: true,position:'top-left' })
+                toast.success("Copied", { autoClose: 500, hideProgressBar: true, position: 'top-left' })
             })
     }
 
@@ -40,12 +31,12 @@ export default function Post({ data }) {
     return (
         <div className="w3-card w3-margin w3-round-large">
             <header className="w3-container w3-light-grey">
-                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#333333' }} onClick={textToCopy}>{data.headline}</h5>
+                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#333333' }} onDoubleClick={textToCopy}>{data.headline}</h5>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div className="w3-twothird">
                         <p><span role="img" aria-label="pen">📝</span> Written by: <Link href={`https://github.com/${data.writer}`}>{data.writer}</Link></p>
-                        <p><span role="img" aria-label="clock">🕰️</span> Created: {convertUtcToIst(data.created)}</p>
-                        <p><span role="img" aria-label="refresh">🔄</span> Last updated: {convertUtcToIst(data.updated)}</p>
+                        <p><span role="img" aria-label="clock">🕰️</span> Created: {convertUTCToSriLankaTime(data.created)}</p>
+                        <p><span role="img" aria-label="refresh">🔄</span> Last updated: {convertUTCToSriLankaTime(data.updated)}</p>
                     </div>
                     <div className="w3-third">
                         <img src={data.image} alt="Author's avatar" className="w3-right w3-circle w3-margin-right" style={{ width: '60px' }} />
@@ -66,8 +57,8 @@ export default function Post({ data }) {
                             <div key={comment.cID} className="w3-card-2 w3-margin" style={{ width: '90%' }}>
                                 <header className="w3-container w3-light-grey">
                                     <p><span role="img" aria-label="speech bubble">💬</span> Comment by: <Link href={`https://github.com/${comment.commenter}`}>{comment.commenter}</Link></p>
-                                    <p><span role="img" aria-label="clock">🕰️</span> Created: {convertUtcToIst(comment.created)}</p>
-                                    <p><span role="img" aria-label="refresh">🔄</span> Last updated: {convertUtcToIst(comment.updated)}</p>
+                                    <p><span role="img" aria-label="clock">🕰️</span> Created: {convertUTCToSriLankaTime(comment.created)}</p>
+                                    <p><span role="img" aria-label="refresh">🔄</span> Last updated: {convertUTCToSriLankaTime(comment.updated)}</p>
                                 </header>
                                 <div className="w3-container w3-padding">
                                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
