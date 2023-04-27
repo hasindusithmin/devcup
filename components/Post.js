@@ -4,10 +4,10 @@ import Gist from 'super-react-gist'
 export default function Post({ data }) {
 
     function convertUTCToSriLankaTime(utcDateTimeString) {
-        const utcDateTime = new Date(utcDateTimeString);
-        const sriLankaOffset = 330; // Sri Lanka time zone is UTC+05:30
-        const sriLankaDateTime = new Date(utcDateTime.getTime() + sriLankaOffset * 60 * 1000);
-        return sriLankaDateTime.toLocaleString();
+        const date = new Date(utcDateTimeString);
+        const options = { timeZone: 'Asia/Colombo' }; // Set timezone to Sri Lanka
+        const dateTimeStr = date.toLocaleString('en-US', options);
+        return dateTimeStr;
     }
 
 
@@ -29,12 +29,12 @@ export default function Post({ data }) {
 
 
     return (
-        <div className="w3-card w3-margin w3-round-large">
+        <div className="w3-card w3-round-large w3-margin-small">
             <header className="w3-container w3-light-grey">
                 <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#7b6d55' }} onDoubleClick={textToCopy}>{data.headline}</h5>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div className="w3-twothird">
-                        <p><span role="img" aria-label="pen">📝</span> Written by: <Link href={`https://github.com/${data.writer}`}>{data.writer}</Link></p>
+                        <p><span role="img" aria-label="pen">📝</span> Written by: <Link href={`https://github.com/${data.writer}`} target="_blank">{data.writer}</Link></p>
                         <p><span role="img" aria-label="clock">🕰️</span> Created: {convertUTCToSriLankaTime(data.created)}</p>
                         <p><span role="img" aria-label="refresh">🔄</span> Last updated: {convertUTCToSriLankaTime(data.updated)}</p>
                     </div>

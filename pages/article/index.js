@@ -159,7 +159,7 @@ export default function Page() {
 
                 <div className="w3-col l4">
                     {/* About Card */}
-                    <div className="w3-card w3-round-large w3-margin w3-margin-top">
+                    <div className="w3-card w3-round-large w3-margin-small">
                         <img
                             src="/devcup-logo.png"
                             style={{ width: "100%" }}
@@ -173,7 +173,6 @@ export default function Page() {
                             </p>
                         </div>
                     </div>
-                    <hr />
                 </div>
 
 
