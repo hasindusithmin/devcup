@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
-// Import the SweetAlert2 library
+import { Typewriter } from 'react-typewriting-effect';
 import Swal from 'sweetalert2';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Gist from 'super-react-gist'
 import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
@@ -18,7 +18,6 @@ export default function Home() {
 
   // Create a function to validate a URL
   async function validateUrl(url) {
-    console.log(url);
     const validProtocol = 'https://';
     const validDomain = 'gist.github.com';
 
@@ -180,7 +179,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <ToastContainer />
-      <main className={`${inter.className} w3-panel w3-content`} style={{ maxWidth: 1400 }}>
+      <main className={`w3-content ${inter.className}`} style={{ maxWidth: 1400 }}>
 
         <div className="w3-col l8 s12">
           <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
@@ -201,7 +200,7 @@ export default function Home() {
               }
             </Splide>
             <div>
-              <h3 className='w3-opacity' style={{ fontWeight: 'bold' }}>
+              <h3 style={{ color: '#7b6d55' }}>
                 THE POWER OF KNOWLEDGE SHARING
               </h3>
               <p>
@@ -215,7 +214,7 @@ export default function Home() {
           </div>
 
           <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
-            <h3 className='w3-opacity' style={{ fontWeight: 'bold' }}>
+            <h3 style={{ color: '#7b6d55' }}>
               A STEP-BY-STEP GUIDE TO SHARING YOUR IDEAS ON DEVCUP
             </h3>
             To create a markdown file in Gist, follow these simple steps:
@@ -245,10 +244,10 @@ export default function Home() {
           </div>
 
           <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
-            <h3 className='w3-opacity' style={{ fontWeight: 'bold' }}>
+            <h3 style={{ color: '#7b6d55' }}>
               WHICH CATEGORY WOULD YOU LIKE TO POST UNDER?
             </h3>
-            <h4 className='w3-opacity'>
+            <h4 style={{ color: '#7b6d55' }}>
               HOW ABOUT THIS:
             </h4>
             <p className='w3-center'>
@@ -270,13 +269,13 @@ export default function Home() {
               className='w3-round'
             />
             <div className="w3-container w3-white w3-padding">
-              <h4>
-                <b>Welcome to DevCup!</b>
+              <h4 style={{ color: '#7b6d55' }}>
+                WELOCME TO DEVCUP
               </h4>
               <p>
                 Our blog is dedicated to providing valuable insights and resources for developers who want to stay up-to-date with the latest industry trends and technologies. We understand that developers are always on the go, which is why we offer a collection of informative and concise articles that you can read while enjoying a cup of coffee. From coding tutorials and best practices to career advice and interviews with top developers, we've got you covered with content that's easy to consume and apply to your work. Join the DevCup community today to elevate your skills and stay ahead in your career.
               </p>
-              <p>
+              <p className='w3-center'>
                 <Link href="https://www.linkedin.com/company/devcup/" target='_blank' className='w3-button w3-light-gray w3-round-xxlarge'><i className="fa fa-linkedin-square" aria-hidden="true"></i> <b>Visit our linkedin page</b></Link>
               </p>
             </div>

@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 import 'react-toastify/dist/ReactToastify.css';
 import '@splidejs/react-splide/css';
+import 'react-typewriting-effect/dist/index.css';
 import { Analytics } from '@vercel/analytics/react';
 import Navbar from '@/components/Navbar';
 import Head from 'next/head';

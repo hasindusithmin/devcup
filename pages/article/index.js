@@ -113,7 +113,7 @@ export default function Page() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className={`w3-light-grey w3-content ${INTER.className}`} style={{ maxWidth: 1400 }}>
+            <main className={`w3-content ${INTER.className}`} style={{ maxWidth: 1400 }}>
 
                 <div className="w3-col l8 s12">
                     {

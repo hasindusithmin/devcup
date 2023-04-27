@@ -31,7 +31,7 @@ export default function Post({ data }) {
     return (
         <div className="w3-card w3-margin w3-round-large">
             <header className="w3-container w3-light-grey">
-                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#333333' }} onDoubleClick={textToCopy}>{data.headline}</h5>
+                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#7b6d55' }} onDoubleClick={textToCopy}>{data.headline}</h5>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div className="w3-twothird">
                         <p><span role="img" aria-label="pen">📝</span> Written by: <Link href={`https://github.com/${data.writer}`}>{data.writer}</Link></p>
