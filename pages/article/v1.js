@@ -46,7 +46,7 @@ export default function Page() {
     useEffect(() => {
         (async () => {
             const toastID = toast.loading("Please wait...")
-            const res = await fetch('/api/articles');
+            const res = await fetch('/api/article');
             if (res.status === 200) {
                 toast.update(toastID, { render: "Data is fetched successfully!", type: "success", isLoading: false, autoClose: 1500, hideProgressBar: true });
                 const codes = await res.json();
