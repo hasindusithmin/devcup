@@ -233,23 +233,7 @@ export default function Home() {
               </p>
             </div>
           </div>
-          {
-            verified &&
-            <div className="w3-card w3-margin-small w3-padding w3-round-xlarge w3-hide-large">
-              <div className='w3-center w3-padding'>
-                <button className='w3-button w3-blue w3-round-large w3-margin-right' onClick={published} disabled={verified && !posting ? false : true}>
-                  <b><i className="fa fa-bullhorn" aria-hidden="true"></i> Publish</b>
-                </button>
-                <button className='w3-button w3-red w3-round-large w3-margin-left' onClick={() => { setVerified(false) }} disabled={verified && !posting ? false : true}>
-                  <b><i className="fa fa-ban" aria-hidden="true"></i> Cancel</b>
-                </button>
-              </div>
-              <Gist
-                url={`https://gist.github.com/hasindusithmin/${gistID}`}
-                LoadingComponent={() => <div>Waiting for Gist...</div>}
-              />
-            </div>
-          }
+
           <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
             <Splide aria-label="Home Page Slideshow" options={{ autoplay: true, interval: 3000 }}>
               {
@@ -317,6 +301,23 @@ export default function Home() {
                 <button className='w3-button w3-light-gray w3-round-xlarge' disabled={verified ? true : false} onClick={openModalForVerifyURL}><i className="fa fa-plus-circle" aria-hidden="true"></i> <b>Add post</b></button>
               </p>
               <Waypoint onEnter={showCate} />
+            </div>
+          }
+          {
+            verified &&
+            <div className="w3-card w3-margin-small w3-padding w3-round-xlarge w3-hide-large">
+              <div className='w3-center w3-padding'>
+                <button className='w3-button w3-blue w3-round-large w3-margin-right' onClick={published} disabled={verified && !posting ? false : true}>
+                  <b><i className="fa fa-bullhorn" aria-hidden="true"></i> Publish</b>
+                </button>
+                <button className='w3-button w3-red w3-round-large w3-margin-left' onClick={() => { setVerified(false) }} disabled={verified && !posting ? false : true}>
+                  <b><i className="fa fa-ban" aria-hidden="true"></i> Cancel</b>
+                </button>
+              </div>
+              <Gist
+                url={`https://gist.github.com/hasindusithmin/${gistID}`}
+                LoadingComponent={() => <div>Waiting for Gist...</div>}
+              />
             </div>
           }
 
