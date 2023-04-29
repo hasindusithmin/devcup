@@ -53,7 +53,7 @@ export default function Post({ data }) {
             </header>
             <div className="w3-container">
                 <p>
-                    <Gist url={`https://gist.github.com/${data.writer}/${data.pID}`} />
+                    <Gist url={`https://gist.github.com/${data.writer}/${data.pID}`} LoadingComponent={() => <div>⏳Please wait...</div>} />
                 </p>
                 <div className="w3-padding">
                     <button className="w3-button w3-blue w3-round-large" onClick={addComment}>Add Comment 🗨️</button>
