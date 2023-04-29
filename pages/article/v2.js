@@ -83,6 +83,7 @@ export default function V2() {
     }, [currentPage]);
 
     const handlePageClick = (selectedPage) => {
+        window?.scrollTo({ top: 0, behavior: 'smooth' })
         setCurrentPage(selectedPage.selected);
     };
 
@@ -103,7 +104,7 @@ export default function V2() {
                         Articles && Articles.length > 0 &&
                         <>
                             {
-                               <Items currentItems={Articles} />
+                                <Items currentItems={Articles} />
                             }
                             <div className="w3-center">
                                 <ReactPaginate
@@ -138,7 +139,7 @@ export default function V2() {
                     {
                         !Articles && <Loading />
                     }
-                    
+
                 </div>
 
                 <div className="w3-col l4 w3-hide-small">
