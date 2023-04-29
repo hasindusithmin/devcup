@@ -8,6 +8,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import devicon from '@/js/devicon';
+import { Waypoint } from 'react-waypoint';
+import Loading from '@/components/Loading';
+import { Typewriter } from 'react-simple-typewriter'
+import Info from '@/components/Info';
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -169,6 +174,31 @@ export default function Home() {
     }
   }
 
+  const animationDelay = 1500;
+
+  const [guildLoading, setGuildLoading] = useState(false)
+  const [guild, setGuild] = useState(false);
+
+  const showGuild = () => {
+    if (guild) return
+    setGuildLoading(true)
+    setTimeout(() => {
+      setGuildLoading(false)
+      setGuild(true)
+    }, animationDelay)
+  }
+
+  const [cateLoading, setCateLoading] = useState(false)
+  const [cate, setCate] = useState(false);
+
+  const showCate = () => {
+    if (cate) return
+    setCateLoading(true)
+    setTimeout(() => {
+      setCateLoading(false)
+      setCate(true)
+    }, animationDelay)
+  }
   return (
     <>
       <Head>
@@ -181,6 +211,27 @@ export default function Home() {
       <main className={`w3-content ${inter.className}`} style={{ maxWidth: 1400 }}>
 
         <div className="w3-col l8 s12">
+
+          <div className="w3-card w3-margin-small w3-padding w3-round-xlarge w3-hide-large">
+            <Info />
+          </div>
+          {
+            verified &&
+            <div className="w3-card w3-margin-small w3-padding w3-round-xlarge w3-hide-large">
+              <div className='w3-center w3-padding'>
+                <button className='w3-button w3-blue w3-round-large w3-margin-right' onClick={published} disabled={verified && !posting ? false : true}>
+                  <b><i className="fa fa-bullhorn" aria-hidden="true"></i> Publish</b>
+                </button>
+                <button className='w3-button w3-red w3-round-large w3-margin-left' onClick={() => { setVerified(false) }} disabled={verified && !posting ? false : true}>
+                  <b><i className="fa fa-ban" aria-hidden="true"></i> Cancel</b>
+                </button>
+              </div>
+              <Gist
+                url={`https://gist.github.com/hasindusithmin/${gistID}`}
+                LoadingComponent={() => <div>Waiting for Gist...</div>}
+              />
+            </div>
+          }
           <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
             <Splide aria-label="Home Page Slideshow" options={{ autoplay: true, interval: 3000 }}>
               {
@@ -210,74 +261,77 @@ export default function Home() {
                 So, let's embrace the power of knowledge sharing and work together to achieve our goals! 🤝💪🚀
               </p>
             </div>
+            <Waypoint onEnter={showGuild} />
           </div>
 
-          <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
-            <h3 style={{ color: '#7b6d55' }}>
-              A STEP-BY-STEP GUIDE TO SHARING YOUR IDEAS ON DEVCUP
-            </h3>
-            To create a markdown file in Gist, follow these simple steps:
-            <ol style={{ listStyleType: 'none' }}>
-              <li>🌐 Go to the <Link href="https://gist.github.com/" target='_blank'>gist.github.com</Link> website.</li>
-              <li>👤 Sign in to your account or create a new one if you haven't already.</li>
-              <li>➕ Click on the "New Gist" button in the top-right corner.</li>
-              <li>📝 Name your Gist and add a description if you want to.</li>
-              <li>📋 Write or copy-paste your markdown content into the editor.</li>
-              <li>💾 Click on the "Create public Gist" button to save your file.</li>
-            </ol>
-            <p>
-              <button className='w3-button w3-light-gray w3-round-xlarge' onClick={openModalForInstruction}><i className="fa fa-eye" aria-hidden="true"></i> <b>For visual learners</b></button>
-            </p>
-            To add your Gist to DevCup, follow these steps:
-            <ol style={{ listStyleType: 'none' }}>
-              <li>📋 Copy the link address of your Gist from the address bar in your browser.</li>
-              <li>👉 Go to DevCup and click on the "Add post" button.</li>
-              <li>📝 Paste the link address of your Gist into the appropriate field.</li>
-              <li>🚀 Click on the "Validate" button to add your Gist to DevCup.</li>
-              <li>⏳ Wait for DevCup to complete its verification process.</li>
-              <li>✅ Once your Gist has been validated, the "Publish" button will become available. Click on it to publish your post.</li>
-            </ol>
-            <p>
-              <button className='w3-button w3-light-gray w3-round-xlarge' disabled={verified ? true : false} onClick={openModalForVerifyURL}><i className="fa fa-plus-circle" aria-hidden="true"></i> <b>Add post</b></button>
-            </p>
-          </div>
+          {
+            guildLoading && <Loading />
+          }
 
-          <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
-            <h3 style={{ color: '#7b6d55' }}>
-              WHICH CATEGORY WOULD YOU LIKE TO POST UNDER?
-            </h3>
-            <h4 style={{ color: '#7b6d55' }}>
-              HOW ABOUT THIS:
-            </h4>
-            <p className='w3-center'>
-              {
-                Object.entries(devicon).map(([key, value]) =>
-                  <Image key={key} className="w3-tag w3-white" width={48} height={48} src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${key.toLowerCase()}/${value}.svg`} alt={key} title={key} onClick={() => { openModalForDevIcon(key, value) }} />
-                )
-              }
-            </p>
-          </div>
+          {
+            guild &&
+            <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
+              <h3 style={{ color: '#7b6d55' }}>
+                A STEP-BY-STEP GUIDE TO SHARING YOUR IDEAS ON DEVCUP
+              </h3>
+              To create a markdown file in Gist, follow these simple steps:
+              <ol className='w3-ul'>
+                <li>🌐 Go to the <Link href="https://gist.github.com/" target='_blank'>gist.github.com</Link> website.</li>
+                <li>👤 Sign in to your account or create a new one if you haven't already.</li>
+                <li>➕ Click on the "New Gist" button in the top-right corner.</li>
+                <li>📝 Name your Gist and add a description if you want to.</li>
+                <li>📋 Write or copy-paste your markdown content into the editor.</li>
+                <li>💾 Click on the "Create public Gist" button to save your file.</li>
+              </ol>
+              <p>
+                <button className='w3-button w3-light-gray w3-round-xlarge' onClick={openModalForInstruction}><i className="fa fa-eye" aria-hidden="true"></i> <b>For visual learners</b></button>
+              </p>
+              To add your Gist to DevCup, follow these steps:
+              <ol className='w3-ul'>
+                <li>📋 Copy the link address of your Gist from the address bar in your browser.</li>
+                <li>👉 Go to DevCup and click on the "Add post" button.</li>
+                <li>📝 Paste the link address of your Gist into the appropriate field.</li>
+                <li>🚀 Click on the "Validate" button to add your Gist to DevCup.</li>
+                <li>⏳ Wait for DevCup to complete its verification process.</li>
+                <li>✅ Once your Gist has been validated, the "Publish" button will become available. Click on it to publish your post.</li>
+              </ol>
+              <p>
+                <button className='w3-button w3-light-gray w3-round-xlarge' disabled={verified ? true : false} onClick={openModalForVerifyURL}><i className="fa fa-plus-circle" aria-hidden="true"></i> <b>Add post</b></button>
+              </p>
+              <Waypoint onEnter={showCate} />
+            </div>
+          }
+
+          {
+            cateLoading && <Loading />
+          }
+
+          {
+            cate &&
+            <>
+              <div className="w3-card w3-margin-small w3-padding w3-round-xlarge">
+                <h3 style={{ color: '#7b6d55' }}>
+                  WHICH CATEGORY WOULD YOU LIKE TO POST UNDER?
+                </h3>
+                <h4 style={{ color: '#7b6d55' }}>
+                  HOW ABOUT THIS:
+                </h4>
+                <p className='w3-center'>
+                  {
+                    Object.entries(devicon).map(([key, value]) =>
+                      <Image key={key} className="w3-tag w3-white" width={48} height={48} src={`https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${key.toLowerCase()}/${value}.svg`} alt={key} title={key} onClick={() => { openModalForDevIcon(key, value) }} />
+                    )
+                  }
+                </p>
+              </div>
+            </>
+          }
 
         </div>
 
-        <div className="w3-col l4">
+        <div className="w3-col l4 w3-hide-small w3-hide-medium">
           <div className="w3-card w3-round-xlarge w3-margin-small">
-            <img
-              src="/devcup-logo.png"
-              style={{ width: "100%" }}
-              className='w3-round'
-            />
-            <div className="w3-container w3-white w3-padding">
-              <h4 style={{ color: '#7b6d55' }}>
-                WELOCME TO DEVCUP
-              </h4>
-              <p>
-                Our blog is dedicated to providing valuable insights and resources for developers who want to stay up-to-date with the latest industry trends and technologies. We understand that developers are always on the go, which is why we offer a collection of informative and concise articles that you can read while enjoying a cup of coffee. From coding tutorials and best practices to career advice and interviews with top developers, we've got you covered with content that's easy to consume and apply to your work. Join the DevCup community today to elevate your skills and stay ahead in your career.
-              </p>
-              <p className='w3-center'>
-                <Link href="https://www.linkedin.com/company/devcup/" target='_blank' className='w3-button w3-light-gray w3-round-xxlarge'><i className="fa fa-linkedin-square" aria-hidden="true"></i> <b>Visit our linkedin page</b></Link>
-              </p>
-            </div>
+            <Info />
           </div>
           {
             verified &&

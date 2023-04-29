@@ -61,7 +61,7 @@ export default function V2() {
                         comments
                     };
                 }));
-                toast.update(toastID, { render: "🢂successfull!", type: "success", isLoading: false, autoClose: 1500, hideProgressBar: true });
+                toast.update(toastID, { render: "Successfull!", type: "success", isLoading: false, autoClose: 1500, hideProgressBar: true });
                 setArticles(articles.filter(Boolean));
             }
             else {
