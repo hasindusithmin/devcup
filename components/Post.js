@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { toast } from "react-toastify";
 import Gist from 'super-react-gist'
+import { Typewriter } from 'react-simple-typewriter'
 export default function Post({ data }) {
 
     function convertUTCToSriLankaTime(utcDateTimeString) {
@@ -31,7 +32,14 @@ export default function Post({ data }) {
     return (
         <div className="w3-card w3-round-large w3-margin-small">
             <header className="w3-container w3-light-grey">
-                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#7b6d55' }} onDoubleClick={textToCopy}>{data.headline}</h5>
+                <h5 className="w3-center" style={{ fontWeight: 'bold', marginBottom: '20px', color: '#7b6d55' }} onDoubleClick={textToCopy}>
+                    <Typewriter
+                        words={[data.headline]}
+                        typeSpeed={90}
+                        stopBlinkinOnComplete
+                        cursor="|"
+                    />
+                </h5>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <div className="w3-twothird">
                         <p><span role="img" aria-label="pen">📝</span> Written by: <Link href={`https://github.com/${data.writer}`} target="_blank">{data.writer}</Link></p>
