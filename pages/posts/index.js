@@ -25,11 +25,11 @@ export default function Post() {
     }, []);
 
     const displayPosts = URLS
-        ? URLS.slice(pagesVisited, pagesVisited + postsPerPage).map(({ URN }) => (
+        ? URLS.slice(pagesVisited, pagesVisited + postsPerPage).map(({ src, height }) => (
             <iframe
-                key={URN}
-                src={URN}
-                height={500}
+                key={src}
+                src={src}
+                height={height}
                 width="100%"
                 frameBorder={0}
                 allowFullScreen=""
