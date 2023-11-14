@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import Loading from '@/components/Loading';
 import axios from 'axios';
-import { extract } from '@/js/requests';
+import { extractContent, generateQuestions, pythonAPI } from '@/js/requests';
+import Swal from 'sweetalert2';
+import showdown from 'showdown';
 
 export default function Post() {
     const [URLS, setURLS] = useState(null);
@@ -43,7 +45,7 @@ export default function Post() {
         document.getElementById(parentID).disabled = true
         document.getElementById(parentID + '_loading').style.display = 'inline'
         document.getElementById(parentID + '_done').style.display = 'none'
-        extract(parentID, function (result, error) {
+        extractContent(parentID, function (result, error) {
             document.getElementById(parentID + '_loading').style.display = 'none'
             document.getElementById(parentID).disabled = false
             if (error) {
@@ -57,9 +59,77 @@ export default function Post() {
         })
     }
 
-    const generateQuestions = (event) => {
-        let parentID = event.target.id;
-        console.log(parentID);
+    const [loading, setLoading] = useState(false);
+    let post = null;
+
+    const openModal = (inputOptions) => {
+        Swal.fire({
+            title: "Generating Questions",
+            input: "select",
+            inputPlaceholder: "Select a question",
+            inputOptions,
+            confirmButtonText: "Get Answer",
+            showCloseButton: true,
+            showLoaderOnConfirm: true,
+            inputValidator: (value) => {
+                if (!value) {
+                    return "You need to choose something!";
+                }
+            },
+            preConfirm: (value) => {
+                return fetch(`${pythonAPI}/answer`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ post, question: value })
+                })
+                    .then(async (response) => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText)
+                        }
+                        const { answer } = await response.json()
+                        const converter = new showdown.Converter()
+                        Swal.fire({
+                            title: value,
+                            html: converter.makeHtml(answer),
+                            showConfirmButton: true,
+                            showCloseButton: false,
+                            customClass: {
+                                title:"w3-medium",
+                                htmlContainer: "w3-justify w3-padding scrollable-container"
+                            },
+                            preConfirm: () => {
+                                openModal(inputOptions)
+                            }
+                        })
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(error)
+                    })
+            },
+            allowOutsideClick: () => !Swal.isLoading()
+        })
+    }
+
+    const getQuestions = (src) => {
+        setLoading(true);
+        const inputOptions = new Promise((resolve) => {
+            generateQuestions(src, function (result, error) {
+                setLoading(false)
+                if (result) {
+                    post = result['post']
+                    const { questions } = result;
+                    const questionsArray = questions.split("\n").filter(question => question != '').map(question => question.trim())
+                    const questionsObject = {}
+                    for (const question of questionsArray) {
+                        questionsObject[question] = question;
+                    }
+                    resolve(questionsObject)
+                }
+            })
+        });
+        openModal(inputOptions)
     }
 
     const displayPosts = URLS
@@ -89,8 +159,8 @@ export default function Post() {
                             &nbsp;Copy to clipboard
                         </button>
                         &nbsp;
-                        <button id={src} className='w3-button w3-green w3-round' onClick={generateQuestions}>
-                            &nbsp;People also ask
+                        <button className='w3-button w3-green w3-round' onClick={() => { getQuestions(src) }} disabled={loading}>
+                            People also ask
                         </button>
                     </div>
                 </div>
@@ -176,3 +246,7 @@ export default function Post() {
         </div>
     );
 }
+
+
+
+

@@ -22,7 +22,9 @@
     "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^9.1.2",
     "react-waypoint": "^10.3.0",
+    "sass": "^1.69.5",
+    "showdown": "^2.1.0",
     "super-react-gist": "^1.1.1",
-    "sweetalert2": "^11.7.3"
+    "sweetalert2": "^11.10.0"
   }
 }

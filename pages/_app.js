@@ -4,6 +4,8 @@ import '@splidejs/react-splide/css';
 import { Analytics } from '@vercel/analytics/react';
 import Navbar from '@/components/Navbar';
 import Head from 'next/head';
+import 'sweetalert2/src/sweetalert2.scss'
+
 export default function App({ Component, pageProps }) {
   return (
     <>
