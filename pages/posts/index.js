@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import ReactPaginate from 'react-paginate';
 import Loading from '@/components/Loading';
+import axios from 'axios';
+import { extract } from '@/js/requests';
 
 export default function Post() {
     const [URLS, setURLS] = useState(null);
@@ -23,26 +24,6 @@ export default function Post() {
                 console.log(err);
             });
     }, []);
-
-    const extract = (url, fn) => {
-        const options = {
-            url: 'https://extractiframe-1-q0489905.deta.app',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: {
-                url
-            }
-        };
-        axios(options)
-            .then(res => {
-                fn(res.data, null)
-            })
-            .catch(err => {
-                fn(null, err.message)
-            })
-    }
 
     const copyToClipboard = (event) => {
         URLS.forEach(({ src }) => {
@@ -76,6 +57,11 @@ export default function Post() {
         })
     }
 
+    const generateQuestions = (event) => {
+        let parentID = event.target.id;
+        console.log(parentID);
+    }
+
     const displayPosts = URLS
         ? URLS.slice(pagesVisited, pagesVisited + postsPerPage).map(({ src, height }) => (
             <div className='w3-padding'>
@@ -101,6 +87,10 @@ export default function Post() {
                             <i id={src + '_done'} className="fa fa-check" style={{ display: "none" }}></i>
                             <i id={src + '_info'} className="fa fa-question-circle" style={{ display: "none" }}></i>
                             &nbsp;Copy to clipboard
+                        </button>
+                        &nbsp;
+                        <button id={src} className='w3-button w3-green w3-round' onClick={generateQuestions}>
+                            &nbsp;People also ask
                         </button>
                     </div>
                 </div>
