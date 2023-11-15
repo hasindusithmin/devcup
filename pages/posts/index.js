@@ -64,16 +64,20 @@ export default function Post() {
 
     const openModal = (inputOptions) => {
         Swal.fire({
-            title: "Generating Questions",
+            title: "Common Questions",
+            customClass: {
+                title:"w3-large",
+                confirmButton:"w3-button w3-green w3-round-xlarge"
+            },
             input: "select",
             inputPlaceholder: "Select a question",
             inputOptions,
-            confirmButtonText: "Get Answer",
+            confirmButtonText: "Find Solution",
             showCloseButton: true,
             showLoaderOnConfirm: true,
             inputValidator: (value) => {
                 if (!value) {
-                    return "You need to choose something!";
+                    return "You need to choose a question!";
                 }
             },
             preConfirm: (value) => {
@@ -94,10 +98,12 @@ export default function Post() {
                             title: value,
                             html: converter.makeHtml(answer),
                             showConfirmButton: true,
-                            showCloseButton: false,
+                            confirmButtonText: "Return to Questions",
+                            showCloseButton: true,
                             customClass: {
-                                title:"w3-medium",
-                                htmlContainer: "w3-justify w3-padding scrollable-container"
+                                title:"w3-large",
+                                htmlContainer: "w3-justify w3-padding scrollable-container",
+                                confirmButton: "w3-button w3-green w3-round-xlarge"
                             },
                             preConfirm: () => {
                                 openModal(inputOptions)
@@ -160,7 +166,7 @@ export default function Post() {
                         </button>
                         &nbsp;
                         <button className='w3-button w3-green w3-round' onClick={() => { getQuestions(src) }} disabled={loading}>
-                            People also ask
+                            Explore Common Questions
                         </button>
                     </div>
                 </div>
