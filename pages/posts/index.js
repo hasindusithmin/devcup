@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import Loading from '@/components/Loading';
 import axios from 'axios';
-import { extractContent, generateQuestions, pythonAPI } from '@/js/requests';
+import { generateQuestions, pythonAPI } from '@/js/requests';
 import Swal from 'sweetalert2';
 import showdown from 'showdown';
 
@@ -26,38 +26,6 @@ export default function Post() {
                 console.log(err);
             });
     }, []);
-
-    const copyToClipboard = (event) => {
-        URLS.forEach(({ src }) => {
-            if (document.getElementById(src)) {
-                document.getElementById(src + '_loading').style.display = 'none'
-                document.getElementById(src + '_done').style.display = 'none'
-                document.getElementById(src + '_info').style.display = 'none'
-            }
-        })
-        let parentID = event.target.id;
-        if (parentID.endsWith("_done")) {
-            parentID = parentID.replace("_done", "")
-        }
-        if (parentID.endsWith("_info")) {
-            parentID = parentID.replace("_info", "")
-        }
-        document.getElementById(parentID).disabled = true
-        document.getElementById(parentID + '_loading').style.display = 'inline'
-        document.getElementById(parentID + '_done').style.display = 'none'
-        extractContent(parentID, function (result, error) {
-            document.getElementById(parentID + '_loading').style.display = 'none'
-            document.getElementById(parentID).disabled = false
-            if (error) {
-                document.getElementById(parentID + '_info').title = error
-                document.getElementById(parentID + '_info').style.display = 'inline'
-            }
-            else {
-                navigator.clipboard.writeText(result.content);
-                document.getElementById(parentID + '_done').style.display = 'inline'
-            }
-        })
-    }
 
     const [loading, setLoading] = useState(false);
     let post = null;
@@ -96,7 +64,7 @@ export default function Post() {
                         const converter = new showdown.Converter()
                         Swal.fire({
                             title: value,
-                            html: converter.makeHtml(answer),
+                            html: answer ? converter.makeHtml(answer):'Content Blocked for Safety Reasons' ,
                             showConfirmButton: true,
                             confirmButtonText: "Return to Questions",
                             showCloseButton: true,
@@ -126,7 +94,7 @@ export default function Post() {
                 if (result) {
                     post = result['post']
                     const { questions } = result;
-                    const questionsArray = questions.split("\n").filter(question => question != '').map(question => question.trim())
+                    const questionsArray = questions.split("\n").filter(question => question != '').map(question => question.replace("-","").trim())
                     const questionsObject = {}
                     for (const question of questionsArray) {
                         questionsObject[question] = question;
@@ -158,13 +126,6 @@ export default function Post() {
                         }}
                     />
                     <div style={{ paddingBottom: 16 }}>
-                        <button id={src} className='w3-button w3-blue w3-round' onClick={copyToClipboard}>
-                            <i id={src + '_loading'} className="fa fa-clock-o" style={{ display: "none" }}></i>
-                            <i id={src + '_done'} className="fa fa-check" style={{ display: "none" }}></i>
-                            <i id={src + '_info'} className="fa fa-question-circle" style={{ display: "none" }}></i>
-                            &nbsp;Copy to clipboard
-                        </button>
-                        &nbsp;
                         <button className='w3-button w3-green w3-round' onClick={() => { getQuestions(src) }} disabled={loading}>
                             Explore Common Questions
                         </button>
