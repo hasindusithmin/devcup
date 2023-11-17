@@ -19,7 +19,7 @@ export default function Post() {
                 'https://script.google.com/macros/s/AKfycbx0h3dNz4DtMN-c1EYYkq79l2OC31U8tZdoLzuhse8HNB2jF7yMCQ6S5aFl3T-H119R/exec'
             )
             .then((res) => {
-                const unique = [...new Set(res.data)];
+                const unique = [...new Set(res.data)].reverse();
                 setURLS(unique);
             })
             .catch((err) => {
@@ -30,60 +30,95 @@ export default function Post() {
     const [loading, setLoading] = useState(false);
     let post = null;
 
-    const openModal = (inputOptions) => {
-        Swal.fire({
-            title: "Common Questions",
-            customClass: {
-                title:"w3-large",
-                confirmButton:"w3-button w3-green w3-round-xlarge"
+    const onConfirm = (inputOptions, post, question) => {
+        return fetch(`${pythonAPI}/answer`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
             },
-            input: "select",
-            inputPlaceholder: "Select a question",
-            inputOptions,
-            confirmButtonText: "Find Solution",
-            showCloseButton: true,
-            showLoaderOnConfirm: true,
-            inputValidator: (value) => {
-                if (!value) {
-                    return "You need to choose a question!";
-                }
-            },
-            preConfirm: (value) => {
-                return fetch(`${pythonAPI}/answer`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ post, question: value })
-                })
-                    .then(async (response) => {
-                        if (!response.ok) {
-                            throw new Error(response.statusText)
-                        }
-                        const { answer } = await response.json()
-                        const converter = new showdown.Converter()
-                        Swal.fire({
-                            title: value,
-                            html: answer ? converter.makeHtml(answer):'Content Blocked for Safety Reasons' ,
-                            showConfirmButton: true,
-                            confirmButtonText: "Return to Questions",
-                            showCloseButton: true,
-                            customClass: {
-                                title:"w3-large",
-                                htmlContainer: "w3-justify w3-padding scrollable-container",
-                                confirmButton: "w3-button w3-green w3-round-xlarge"
-                            },
-                            preConfirm: () => {
-                                openModal(inputOptions)
-                            }
-                        })
-                    })
-                    .catch(error => {
-                        Swal.showValidationMessage(error)
-                    })
-            },
-            allowOutsideClick: () => !Swal.isLoading()
+            body: JSON.stringify({ post, question })
         })
+            .then(async (response) => {
+                if (!response.ok) {
+                    throw new Error(response.statusText)
+                }
+                const { answer } = await response.json()
+                const converter = new showdown.Converter()
+                Swal.fire({
+                    title: question,
+                    html: answer ? converter.makeHtml(answer) : 'Content Blocked for Safety Reasons',
+                    showConfirmButton: true,
+                    confirmButtonText: "Return to common questions",
+                    showDenyButton: true,
+                    denyButtonText: "Pose a question",
+                    showCloseButton: true,
+                    customClass: {
+                        title: "w3-large",
+                        htmlContainer: "w3-justify w3-padding scrollable-container",
+                        confirmButton: "w3-button w3-green w3-round-xlarge",
+                        denyButton: "w3-button w3-blue w3-round-xlarge"
+                    },
+                    preConfirm: () => {
+                        openModal(inputOptions)
+                    },
+                    preDeny: () => {
+                        openModal(inputOptions, true)
+                    }
+                })
+            })
+            .catch(error => {
+                Swal.showValidationMessage(error)
+            })
+    }
+
+    const openModal = (inputOptions, denied = false) => {
+        if (denied) {
+            Swal.fire({
+                title: "Ask Your Question",
+                customClass: {
+                    title: "w3-large",
+                    confirmButton: "w3-button w3-green w3-round-xlarge"
+                },
+                input: "text",
+                inputPlaceholder: "Type your question here",
+                showCloseButton: true,
+                showDenyButton: false,
+                showConfirmButton: true,
+                confirmButtonText: "Find Solution",
+                showLoaderOnConfirm: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "You need to write something!";
+                    }
+                },
+                preConfirm: (value) => onConfirm(inputOptions, post, value),
+                allowOutsideClick: () => !Swal.isLoading()
+            });
+        }
+        else {
+            Swal.fire({
+                title: "Choose a Common Question",
+                customClass: {
+                    title: "w3-large",
+                    confirmButton: "w3-button w3-green w3-round-xlarge"
+                },
+                input: "select",
+                inputPlaceholder: "Select a question",
+                inputOptions,
+                showCloseButton: true,
+                showDenyButton: false,
+                showConfirmButton: true,
+                confirmButtonText: "Find Solution",
+                showLoaderOnConfirm: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "You need to choose a question";
+                    }
+                },
+                preConfirm: (value) => onConfirm(inputOptions, post, value),
+                allowOutsideClick: () => !Swal.isLoading()
+            })
+        }
     }
 
     const getQuestions = (src) => {
@@ -94,7 +129,7 @@ export default function Post() {
                 if (result) {
                     post = result['post']
                     const { questions } = result;
-                    const questionsArray = questions.split("\n").filter(question => question != '').map(question => question.replace("-","").trim())
+                    const questionsArray = questions.split("\n").filter(question => question != '').map(question => question.replace("-", "").trim())
                     const questionsObject = {}
                     for (const question of questionsArray) {
                         questionsObject[question] = question;
