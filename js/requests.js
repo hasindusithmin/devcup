@@ -43,17 +43,8 @@ export const generateQuestions = (url, fn) => {
 }
 
 export const myTestFunc = (url, fn) => {
-    const options = {
-        url: `${pythonAPI}/question`,
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        data: {
-            url
-        }
-    };
-    axios(options)
+   
+    axios(`${pythonAPI}/question`)
         .then(res => {
             fn(res.data, null)
         })
