@@ -45,7 +45,7 @@ export const generateQuestions = (url, fn) => {
 export const myTestFunc = (url, fn) => {
     const options = {
         url: `${pythonAPI}/questions`,
-        method: 'POST',
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
